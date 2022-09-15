@@ -1,37 +1,34 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from "rxjs";
 
-import { Product } from './product';
+import { Product } from "./product";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ProductService {
-  private productsUrl = 'api/products';
-  private suppliersUrl = 'api/suppliers';
-  
-  constructor(private http: HttpClient) { }
+  private productsUrl = "api/products";
+  private suppliersUrl = "api/suppliers";
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        tap(data => console.log('Products: ', JSON.stringify(data))),
-        catchError(this.handleError)
-      );
-  }
+  product$ = this.http.get<Product[]>(this.productsUrl).pipe(
+    tap((data) => console.log("Products: ", JSON.stringify(data))),
+    catchError(this.handleError)
+  );
+
+  constructor(private http: HttpClient) {}
 
   private fakeProduct(): Product {
     return {
       id: 42,
-      productName: 'Another One',
-      productCode: 'TBX-0042',
-      description: 'Our new product',
+      productName: "Another One",
+      productCode: "TBX-0042",
+      description: "Our new product",
       price: 8.9,
       categoryId: 3,
       // category: 'Toolbox',
-      quantityInStock: 30
+      quantityInStock: 30,
     };
   }
 
@@ -50,5 +47,4 @@ export class ProductService {
     console.error(err);
     return throwError(() => errorMessage);
   }
-
 }

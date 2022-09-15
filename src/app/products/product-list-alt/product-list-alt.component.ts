@@ -1,29 +1,32 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
-import { Subscription } from 'rxjs';
+import { catchError, EMPTY, Subscription } from "rxjs";
 
-import { Product } from '../product';
-import { ProductService } from '../product.service';
+import { Product } from "../product";
+import { ProductService } from "../product.service";
 
 @Component({
-  selector: 'pm-product-list',
-  templateUrl: './product-list-alt.component.html'
+  selector: "pm-product-list",
+  templateUrl: "./product-list-alt.component.html",
 })
 export class ProductListAltComponent implements OnInit, OnDestroy {
-  pageTitle = 'Products';
-  errorMessage = '';
+  pageTitle = "Products";
+  errorMessage = "";
   selectedProductId = 0;
 
   products: Product[] = [];
   sub!: Subscription;
+  products$ = this.productService.product$.pipe(
+    catchError((err) => {
+      this.errorMessage = err;
+      return EMPTY;
+    })
+  );
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.sub = this.productService.getProducts().subscribe({
-      next: products => this.products = products,
-      error: err => this.errorMessage = err
-    });
+    console.log();
   }
 
   ngOnDestroy(): void {
@@ -31,6 +34,6 @@ export class ProductListAltComponent implements OnInit, OnDestroy {
   }
 
   onSelected(productId: number): void {
-    console.log('Not yet implemented');
+    console.log("Not yet implemented");
   }
 }
