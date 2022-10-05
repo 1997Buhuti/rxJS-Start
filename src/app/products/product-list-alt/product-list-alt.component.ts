@@ -16,7 +16,7 @@ export class ProductListAltComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
   sub!: Subscription;
-  products$ = this.productService.product$.pipe(
+  products$ = this.productService.productsWithCategory$.pipe(
     catchError((err) => {
       this.errorMessage = err;
       return EMPTY;
